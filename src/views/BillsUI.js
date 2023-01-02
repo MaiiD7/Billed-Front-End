@@ -21,10 +21,12 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
-  const sortedData = data.sort((a,b) => {
-    return (new Date(b.date)) - (new Date(a.date))
-  })
-  return (sortedData && sortedData.length) ? sortedData.map(bill => row(bill)).join("") : ""
+  if (data) {
+    const sortedData = data.sort((a,b) => {
+      return (new Date(b.date)) - (new Date(a.date))
+    })
+    return (sortedData && sortedData.length) ? sortedData.map(bill => row(bill)).join("") : ""
+  }
 }
 
 export default ({ data: bills, loading, error }) => {
