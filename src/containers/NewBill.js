@@ -18,7 +18,9 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const validFormat = ['image/png','image/jpeg','image/jpg']
+    const invalidExtensionMsg = this.document.getElementById('extensionMsg')
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+
     if (file && validFormat.includes(file.type)) {
       const filePath = e.target.value.split(/\\/g)
       const fileName = filePath[filePath.length-1]
@@ -42,11 +44,12 @@ export default class NewBill {
           this.fileUrl = fileUrl
           this.fileName = fileName
         }).catch(error => console.error(error))
+        invalidExtensionMsg.classList.add('hidden')
     } else {
       e.target.value = null
-      //Add notificaton to warn user that the file extension isn't valid
+      const invalidExtensionMsg = this.document.getElementById('extensionMsg')
+      invalidExtensionMsg.classList.remove('hidden')
     }
-    
   }
   handleSubmit = e => {
     e.preventDefault()
