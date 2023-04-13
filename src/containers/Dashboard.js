@@ -88,7 +88,6 @@ export default class {
   handleEditTicket(e, bill, bills) {
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     const billElement = document.getElementById(`open-bill${bill.id}`)
-    console.log(billElement.style.cssText)
     if (billElement.style.cssText == "" || billElement.style.cssText == "background: rgb(13, 90, 229);") {
       bills.forEach(b => {
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })

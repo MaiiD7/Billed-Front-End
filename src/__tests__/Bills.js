@@ -16,10 +16,26 @@ import { modal } from "../views/DashboardFormUI.js";
 jest.mock("../app/store", () => mockStore)
 
 describe("Given I am connected as an employee", () => {
+  let billsMock = '';
+    beforeAll(() => {
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+
+      const store = jest.fn();
+
+      billsMock = new Bills({
+        document,
+        localStorage: window.localStorage,
+        onNavigate,
+        store,
+      });
+      return billsMock
+    })
   describe("When I am on Bills Page", () => {
     test("Then bill icon in vertical layout should be highlighted", async () => {
-
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
         type: 'Employee'
       }))
@@ -46,23 +62,6 @@ describe("Given I am connected as an employee", () => {
       document.body.innerHTML = BillsUI({ data: bills });
 
       const newBillButton = screen.getByTestId("btn-new-bill");
-
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-
-      // we have to mock navigation to test it
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname });
-      };
-
-      const store = jest.fn();
-
-      const billsMock = new Bills({
-        document,
-        localStorage: window.localStorage,
-        onNavigate,
-        store,
-      });
-
       const handleClick = jest.fn(billsMock.handleClickNewBill)
       newBillButton.addEventListener('click', handleClick)
       fireEvent.click(newBillButton)
@@ -75,37 +74,17 @@ describe("Given I am connected as an employee", () => {
 
    describe("When I click on the IconEye", () => {
      test("Then the modal should display the image", () => {
-       document.body.innerHTML = BillsUI({ data: bills });
+      document.body.innerHTML = BillsUI({ data: bills });
        $.fn.modal = jest.fn();
 
        const iconEye = document.getElementById('eye');
        const modalFile = document.getElementById('modaleFile')
        modalFile.classList.add('classTest')
-       
-
-       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-
-        // we have to mock navigation to test it
-       const onNavigate = (pathname) => {
-         document.body.innerHTML = ROUTES({ pathname });
-       };
-
-       const store = jest.fn();
-
-       const billsMock = new Bills({
-         document,
-         localStorage: window.localStorage,
-         onNavigate,
-         store,
-       });
 
        const HandleIconClick = jest.fn(billsMock.handleClickIconEye)
        iconEye.addEventListener('click',() => HandleIconClick(iconEye))
        fireEvent.click(iconEye)
        expect(HandleIconClick).toHaveBeenCalled();
-       console.log(modalFile.className)
-      //  expect(modalFile.className.includes('show')).toBeTruthy();
-
      })
    })
 })
