@@ -70,6 +70,7 @@ describe("Given I am connected as an employee", () => {
       
       fireEvent.submit(formNewBill)
       expect(handleSubmit).toHaveBeenCalled();
+      expect(screen.queryByText("Mes notes de frais")).toBeTruthy()
     })
 
     // test d'intégration POST
